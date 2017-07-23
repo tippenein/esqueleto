@@ -82,6 +82,8 @@ module Database.Esqueleto
   , selectSource
   , selectDistinctSource
   , delete
+  , deleteCascade
+  , deleteCascadeKey
   , deleteCount
   , update
   , updateCount
@@ -436,3 +438,10 @@ deleteKey :: ( PersistStore backend
              , PersistEntity val )
           => Key val -> ReaderT backend m ()
 deleteKey = Database.Persist.delete
+
+
+-- | Synonym for 'Database.Persist.Store.deleteCascade' that does not
+-- clash with @esqueleto@'s 'deleteCascade'.
+deleteCascadeKey :: ( MonadIO m, DeleteCascade record backend)
+                 => Key record -> ReaderT backend m ()
+deleteCascadeKey = Database.Persist.deleteCascade

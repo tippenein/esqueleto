@@ -916,6 +916,11 @@ deleteCount :: ( MonadIO m )
 deleteCount = rawEsqueleto DELETE
 
 
+deleteCascade :: ( MonadIO m, DeleteCascade record backend )
+              => SqlQuery record
+              -> R.ReaderT backend m ()
+deleteCascade = undefined
+
 -- | Execute an @esqueleto@ @UPDATE@ query inside @persistent@'s
 -- 'SqlPersistT' monad.  Note that currently there are no type
 -- checks for statements that should not appear on a @UPDATE@
