@@ -7,7 +7,7 @@ module Database.Esqueleto.Internal.PersistentImport
 import Database.Persist.Sql hiding
   ( BackendSpecificFilter, Filter(..), PersistQuery, SelectOpt(..)
   , Update(..), delete, deleteWhereCount, updateWhereCount, selectList
-  , selectKeysList, deleteCascadeWhere, (=.), (+=.), (-=.), (*=.), (/=.)
+  , selectKeysList, deleteCascade, deleteCascadeWhere, (=.), (+=.), (-=.), (*=.), (/=.)
   , (==.), (!=.), (<.), (>.), (<=.), (>=.), (<-.), (/<-.), (||.)
   , listToJSON, mapToJSON, getPersistMap, limitOffsetOrder, selectSource
   , update , count )

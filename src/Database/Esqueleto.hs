@@ -1,4 +1,4 @@
-{-# LANGUAGE FlexibleContexts, FlexibleInstances, GADTs #-}
+{-# LANGUAGE FlexibleContexts, FlexibleInstances, GADTs, RankNTypes #-}
 -- | The @esqueleto@ EDSL (embedded domain specific language).
 -- This module replaces @Database.Persist@, so instead of
 -- importing that module you should just import this one:
@@ -445,3 +445,11 @@ deleteKey = Database.Persist.delete
 deleteCascadeKey :: ( MonadIO m, DeleteCascade record backend)
                  => Key record -> ReaderT backend m ()
 deleteCascadeKey = Database.Persist.deleteCascade
+
+deleteCascade :: ( MonadIO m
+                 -- , DeleteCascade record backend
+                 -- , SqlBackendCanWrite backend
+                 )
+              => SqlQuery ()
+              -> SqlWriteT m ()
+deleteCascade = undefined

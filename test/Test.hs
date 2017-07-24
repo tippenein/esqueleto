@@ -54,12 +54,14 @@ import qualified Database.Esqueleto.Internal.Sql as EI
 
 
 -- Test schema
-share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistUpperCase|
+share [mkPersist sqlSettings, mkDeleteCascade sqlOnlySettings, mkMigrate "migrateAll"] [persistUpperCase|
   Foo
     name Int
     Primary name
+    deriving Eq Show
   Bar
-    quux FooId
+    quux FooId DeleteCascade
+    deriving Eq Show
 
   Person
     name String
@@ -147,6 +149,7 @@ main = do
       l1 = Lord "Cornwall" (Just 36)
       l2 = Lord "Dorset" Nothing
       l3 = Lord "Chester" (Just 17)
+      foo1 = Foo 1
 
   hspec $ do
     describe "select" $ do
@@ -1006,6 +1009,25 @@ main = do
            nameContains "JOHN" [p1e]
 #endif
 
+
+    describe "deleteCascade" $
+
+      it "works on a simple example" $
+        run $ do
+          fooe <- insert foo1
+          _ <- insert $ Bar fooe
+          let getAll = select $
+                       from $ \p -> do
+                       orderBy [asc (p ^. FooName)]
+                       return p
+          ret1 <- getAll
+          liftIO $ ret1 `shouldBe` [ Entity fooe foo1 ]
+
+          _ <- deleteCascade $
+                  from $ \x ->
+                  where_ (x ^. FooName ==. val 1)
+          ret2 <- getAll
+          liftIO $ ret2 `shouldBe` [ ]
     describe "delete" $
       it "works on a simple example" $
         run $ do
